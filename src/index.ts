@@ -20,7 +20,7 @@ bot.start((ctx) => {
   }
 });
 bot.hears(MessageCommand.Restart, () => {
-  intervalId = setInterval(checkUpdatesAutomatically, 1 * 10000);
+  intervalId = setInterval(checkUpdatesAutomatically, 5 * 60000);
 });
 bot.hears(MessageCommand.Stop, () => {
   if (intervalId) {
