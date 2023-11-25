@@ -1,11 +1,11 @@
-import { token } from "./auth";
 import { formatRussianDate } from "./helpers";
 import { PuppeteerClass } from "./Puppeteer";
 import { BotLanguage, MessageCommand, Operation } from "./types";
 import { Telegraf } from "telegraf";
 
 // polling allows the bot to listen for and receive new messages
-const bot = new Telegraf(token);
+export const BOT_TOKEN = process.env.BOT_TOKEN || "";
+const bot = new Telegraf(BOT_TOKEN);
 const timer = 1 * 60000; // 1 minute
 const channelId = -1002104374671;
 const userChatIds = [336972408, 5441646038];
