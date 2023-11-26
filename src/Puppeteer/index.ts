@@ -6,7 +6,7 @@ import Stealth from "puppeteer-extra-plugin-stealth";
 import { getQueryParams } from "../helpers";
 
 const buttons: Map<Operation, string> = new Map([
-  [Operation.ObywatelstwoPolskie, ""],
+  [Operation.ObywatelstwoPolskie, ""],  
   [Operation.OdbiorKartyPobytu, ""],
   [Operation.OdbiorPaszportu, ""],
   [Operation.SkladanieWnioskow, ""],
@@ -24,9 +24,7 @@ export class PuppeteerClass {
   availableDays: string[] = [];
   recaptchaToken: string | null = "";
 
-  constructor() {
-    // this.createBrowser();
-  }
+  constructor() {}
 
   async createBrowser() {
     this.browser = await puppeteer.launch({ headless: true });

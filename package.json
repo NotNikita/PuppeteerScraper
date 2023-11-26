@@ -4,12 +4,9 @@
   "description": "A basic typescript app starter for 2023.",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf ./build && tsc",
-    "start:dev": "npx nodemon",
-    "start": "npm run build && node build/index.js",
-    "lint": "eslint . --ext .ts",
-    "test": "jest",
-    "test:dev": "jest --watchAll"
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "husky": {
     "hooks": {
@@ -19,6 +16,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "18.18",
+    "npm": "9.8.1"
+  },
   "devDependencies": {
     "@types/intl": "^1.2.2",
     "@types/jest": "^28.1.8",

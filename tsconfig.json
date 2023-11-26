@@ -1,16 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es5",
     "module": "commonjs",
-    "lib": ["es6"],
-    "allowJs": true,
-    "outDir": "build",
-    "rootDir": "src",
-    "strict": true,
     "esModuleInterop": true,
-    "types": ["node", "jest"],
-    "skipLibCheck": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["src/**/*.spec.ts"]
+    "target": "es2021",
+    "moduleResolution": "node",
+    "strict": true,
+    "sourceMap": true,
+    "lib": ["es2021"],
+    "skipLibCheck": true,
+    "rootDir": "src",
+    "outDir": "dist"
+  }
 }

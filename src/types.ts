@@ -1,5 +1,3 @@
-import { ElementHandle } from "puppeteer";
-
 export enum MessageCommand {
   Start = "Start",
   Operacje = "Wybierz Operacje",
@@ -7,7 +5,8 @@ export enum MessageCommand {
   Clear = "/clear",
   Restart = "/restart",
   Stop = "/stop",
-  CheckManually = "Проверить",
+  CheckManually = "/check",
+  Ping = "/ping",
 }
 
 export enum BotLanguage {

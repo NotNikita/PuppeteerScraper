@@ -1,6 +1,6 @@
 import { formatRussianDate } from "./helpers";
 import { PuppeteerClass } from "./Puppeteer";
-import { BotLanguage, MessageCommand, Operation } from "./types";
+import { BotLanguage, MessageCommand } from "./types";
 import { Telegraf } from "telegraf";
 
 // polling allows the bot to listen for and receive new messages
@@ -16,9 +16,7 @@ let intervalId: NodeJS.Timeout | undefined = setInterval(
 );
 
 bot.start((ctx) => {
-  ctx.reply("Bot started. Choose an action:", {
-    ...keyboards.start_menu,
-  });
+  ctx.reply("Bot started.");
   console.log("New user started bot:", ctx.chat);
   if (!userChatIds.includes(ctx.chat.id)) {
     userChatIds.push(ctx.chat.id);
@@ -44,6 +42,9 @@ bot.hears(MessageCommand.CheckManually, async (ctx) => {
     broadCast("Пусто", [ctx.chat.id]);
   }
 });
+bot.hears(MessageCommand.Ping, (ctx) => {
+  broadCast('pong', [channelId])
+})
 function checkUpdatesAutomatically() {
   const puppy = new PuppeteerClass();
   puppy
@@ -67,83 +68,10 @@ function broadCast(message = "привет", users = [channelId]) {
   });
 }
 
-// ------------ LANGUAGE MENU ----------------
-bot.hears(MessageCommand.Jezyk, (ctx) => {
-  ctx.reply("Obsługiwane języki:", keyboards.languages);
-});
-bot.action(BotLanguage.Polska, (ctx) => {
-  language = BotLanguage.Polska;
-  ctx.reply("język zmieniony");
-});
-bot.action(BotLanguage.Russian, (ctx) => {
-  language = BotLanguage.Russian;
-  ctx.reply("язык изменен");
-});
-bot.action(BotLanguage.English, (ctx) => {
-  language = BotLanguage.English;
-  ctx.reply("language changed");
-});
-
 // Start the bot using polling
 bot.launch().then(() => {
   console.log("Bot is running with polling");
 });
 
-const keyboards = {
-  start_menu: {
-    reply_markup: {
-      keyboard: [],
-    },
-  },
-  operations: {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          {
-            text: Operation.ObywatelstwoPolskie,
-            callback_data: Operation.ObywatelstwoPolskie,
-          },
-        ],
-        [
-          {
-            text: Operation.OdbiorKartyPobytu,
-            callback_data: Operation.OdbiorKartyPobytu,
-          },
-        ],
-        [
-          {
-            text: Operation.OdbiorPaszportu,
-            callback_data: Operation.OdbiorPaszportu,
-          },
-        ],
-        [
-          {
-            text: Operation.SkladanieWnioskow,
-            callback_data: Operation.SkladanieWnioskow,
-          },
-        ],
-        [
-          {
-            text: Operation.UzeskanieStempla,
-            callback_data: Operation.UzeskanieStempla,
-          },
-        ],
-        [
-          {
-            text: Operation.ZlozenieWniosku,
-            callback_data: Operation.ZlozenieWniosku,
-          },
-        ],
-      ],
-    },
-  },
-  languages: {
-    reply_markup: {
-      inline_keyboard: [
-        [{ text: BotLanguage.Polska, callback_data: BotLanguage.Polska }],
-        [{ text: BotLanguage.English, callback_data: BotLanguage.English }],
-        [{ text: BotLanguage.Russian, callback_data: BotLanguage.Russian }],
-      ],
-    },
-  },
-};
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
