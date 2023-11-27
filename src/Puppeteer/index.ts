@@ -27,7 +27,7 @@ export class PuppeteerClass {
   constructor() {}
 
   async createBrowser() {
-    this.browser = await puppeteer.launch({ headless: true });
+    this.browser = await puppeteer.launch();
   }
 
   async initiatePage() {

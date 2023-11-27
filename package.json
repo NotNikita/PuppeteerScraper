@@ -53,5 +53,8 @@
   },
   "pkg": {
     "assets": "node_modules/puppeteer-extra-plugin-stealth/**/*.*"
+  },
+  "puppeteer": {
+    "chromium_revision": "119.0.6045.105"
   }
 }
