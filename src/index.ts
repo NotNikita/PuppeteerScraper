@@ -1,7 +1,14 @@
 import { formatRussianDate } from "./helpers";
 import { PuppeteerClass } from "./Puppeteer";
-import { BotLanguage, MessageCommand } from "./types";
+import { MessageCommand } from "./types";
 import { Telegraf } from "telegraf";
+import http from 'http'
+
+http.createServer((req, res) => {
+  res.writeHead(200, {'Content-Type': 'text/plain'})
+  res.write('Hello World!')
+  res.end()
+}).listen(+process.env.PORT!)
 
 // polling allows the bot to listen for and receive new messages
 export const BOT_TOKEN = process.env.BOT_TOKEN || "";
@@ -9,7 +16,6 @@ const bot = new Telegraf(BOT_TOKEN);
 const timer = 1 * 60000; // 1 minute
 const channelId = -1002104374671;
 const userChatIds = [336972408, 5441646038];
-let language = BotLanguage.Polska;
 let intervalId: NodeJS.Timeout | undefined = setInterval(
   checkUpdatesAutomatically,
   timer
