@@ -18,7 +18,7 @@ export class PuppeteerClass {
   async createBrowser() {
     this.browser = await puppeteer.launch({
       headless: "new",
-      args: ["--no-sandbox"],
+      args: ["--no-sandbox", "--single-process", "--no-zygote"],
     });
   }
 
