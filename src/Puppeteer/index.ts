@@ -47,11 +47,11 @@ export class PuppeteerClass {
           .launch({
             headless: "new",
             args: ["--no-sandbox", "--single-process", "--no-zygote"],
-            timeout: 35000,
           })
           .then(async (browser) => {
             this.browser = browser;
             this.page = await this.browser?.newPage();
+            // this.page.setDefaultNavigationTimeout(120000);
 
             this.page?.on("response", async (response) => {
               const request = response.request();
