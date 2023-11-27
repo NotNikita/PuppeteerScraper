@@ -46,7 +46,7 @@ export class PuppeteerClass {
         puppeteerExtra
           .launch({
             headless: "new",
-            args: ["--no-sandbox"],
+            args: ["--no-sandbox", "--single-process", "--no-zygote"],
           })
           .then(async (browser) => {
             this.browser = browser;
