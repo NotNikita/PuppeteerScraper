@@ -7,7 +7,7 @@ export enum MessageCommand {
   Clear = "/clear",
   Restart = "/restart",
   Stop = "/stop",
-  CheckManually = "Проверить",
+  CheckManually = "/check",
 }
 
 export enum BotLanguage {

@@ -1,9 +1,11 @@
+import * as dotenv from "dotenv";
 import { formatRussianDate } from "./helpers";
 import { PuppeteerClass } from "./Puppeteer";
 import { BotLanguage, MessageCommand, Operation } from "./types";
 import { Telegraf } from "telegraf";
 
 // polling allows the bot to listen for and receive new messages
+dotenv.config();
 export const BOT_TOKEN = process.env.BOT_TOKEN || "";
 const bot = new Telegraf(BOT_TOKEN);
 const timer = 1 * 60000; // 1 minute
