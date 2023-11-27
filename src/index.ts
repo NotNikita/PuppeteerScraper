@@ -4,7 +4,7 @@ import { MessageCommand } from "./types";
 import { Telegraf } from "telegraf";
 import http from 'http'
 
-http.createServer((req, res) => {
+http.createServer((_req, res) => {
   res.writeHead(200, {'Content-Type': 'text/plain'})
   res.write('Hello World!')
   res.end()
@@ -21,7 +21,7 @@ let intervalId: NodeJS.Timeout | undefined = setInterval(
   timer
 );
 
-bot.start((ctx) => {
+bot.start((ctx: { reply: (arg0: string) => void; chat: { id: number; }; }) => {
   ctx.reply("Bot started.");
   console.log("New user started bot:", ctx.chat);
   if (!userChatIds.includes(ctx.chat.id)) {
@@ -36,7 +36,7 @@ bot.hears(MessageCommand.Stop, () => {
     clearInterval(intervalId);
   }
 });
-bot.hears(MessageCommand.CheckManually, async (ctx) => {
+bot.hears(MessageCommand.CheckManually, async (ctx: { chat: { id: number; }; }) => {
   const puppy = new PuppeteerClass();
   const availableDays = await puppy.visitAndIntercept();
   console.log(`${MessageCommand.CheckManually} availableDays`, availableDays);
@@ -48,7 +48,7 @@ bot.hears(MessageCommand.CheckManually, async (ctx) => {
     broadCast("Пусто", [ctx.chat.id]);
   }
 });
-bot.hears(MessageCommand.Ping, (ctx) => {
+bot.hears(MessageCommand.Ping, () => {
   broadCast('pong', [channelId])
 })
 function checkUpdatesAutomatically() {
