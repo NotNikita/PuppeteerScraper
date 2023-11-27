@@ -8,7 +8,7 @@ http.createServer((req, res) => {
   res.writeHead(200, {'Content-Type': 'text/plain'})
   res.write('Hello World!')
   res.end()
-}).listen(+process.env.PORT!)
+}).listen(+(process.env.PORT || 4000))
 
 // polling allows the bot to listen for and receive new messages
 export const BOT_TOKEN = process.env.BOT_TOKEN || "";

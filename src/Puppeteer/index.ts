@@ -51,38 +51,45 @@ export class PuppeteerClass {
 
   visitAndIntercept() {
     const targetUrl = `${this.siteUrl}api/Slot/GetAvailableDaysForOperation`;
-
-    return new Promise<string[]>((resolve) => {
-      puppeteerExtra.use(Stealth());
-      puppeteerExtra.launch({ headless: true }).then(async (browser) => {
-        this.browser = browser;
-        this.page = await this.browser?.newPage();
-
-        this.page?.on("response", async (response) => {
-          const request = response.request();
-          const requestUrl = request.url();
-          if (requestUrl.includes(targetUrl)) {
-            this.recaptchaToken =
-              getQueryParams(requestUrl).get("recaptchaToken");
-            const jsonedResponse = await response.json();
-            this.availableDays = jsonedResponse.availableDays;
-            await this.browser?.close();
-            resolve(this.availableDays);
-          }
+    try {
+      return new Promise<string[]>((resolve) => {
+        puppeteerExtra.use(Stealth());
+        puppeteerExtra.launch({ headless: true }).then(async (browser) => {
+          this.browser = browser;
+          this.page = await this.browser?.newPage();
+  
+          this.page?.on("response", async (response) => {
+            const request = response.request();
+            const requestUrl = request.url();
+            if (requestUrl.includes(targetUrl)) {
+              this.recaptchaToken =
+                getQueryParams(requestUrl).get("recaptchaToken");
+              const jsonedResponse = await response.json();
+              this.availableDays = jsonedResponse.availableDays;
+              await this.browser?.close();
+              resolve(this.availableDays);
+            }
+          });
+  
+          await this.page?.goto(this.siteUrl, { timeout: 20000 });
+          await this.page?.setViewport({ width: 1080, height: 1500 });
+  
+          const targetButton = "#Operacja0 .row:nth-child(5)";
+          const dalejButton = "button.btn.footer-btn.btn-secondary";
+  
+          await this.page?.waitForSelector(targetButton);
+          await this.page?.click(targetButton);
+          await this.page?.waitForSelector(dalejButton);
+  
+          console.log("Interception completed\n\n");
         });
-
-        await this.page?.goto(this.siteUrl, { timeout: 20000 });
-        await this.page?.setViewport({ width: 1080, height: 1500 });
-
-        const targetButton = "#Operacja0 .row:nth-child(5)";
-        const dalejButton = "button.btn.footer-btn.btn-secondary";
-
-        await this.page?.waitForSelector(targetButton);
-        await this.page?.click(targetButton);
-        await this.page?.waitForSelector(dalejButton);
-
-        console.log("Interception completed\n\n");
       });
-    });
+    }
+    catch (e) {
+      return new Promise<string[]>(resolve => resolve(['Error']))
+    }
+    finally {
+      this.browser?.close();
+    }
   }
 }
