@@ -47,6 +47,7 @@ export class PuppeteerClass {
           .launch({
             headless: "new",
             args: ["--no-sandbox", "--single-process", "--no-zygote"],
+            timeout: 35000,
           })
           .then(async (browser) => {
             this.browser = browser;
@@ -65,7 +66,7 @@ export class PuppeteerClass {
               }
             });
 
-            await this.page?.goto(this.siteUrl, { timeout: 20000 });
+            await this.page?.goto(this.siteUrl, { timeout: 0 });
             await this.page?.setViewport({ width: 1080, height: 1500 });
 
             const targetButton = "#Operacja0 .row:nth-child(5)";
