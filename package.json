@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "tsc",
     "start": "node dist/index.js",
+    "start:dev": "npx nodemon",
     "heroku-postbuild": "mkdir ./.cache && mv /app/.cache/puppeteer ./.cache"
   },
   "husky": {
