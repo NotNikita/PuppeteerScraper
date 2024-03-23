@@ -3,6 +3,7 @@ import { Telegraf } from "telegraf";
 import { formatRussianDate } from "./helpers";
 import { PuppeteerClass } from "./Puppeteer/puppeteer";
 import { MessageCommand } from "./types";
+import { BOT_TOKEN } from "./config";
 
 http
   .createServer((_req, res) => {
@@ -13,7 +14,6 @@ http
   .listen(+(process.env.PORT || 4000));
 
 // polling allows the bot to listen for and receive new messages
-export const BOT_TOKEN = process.env.BOT_TOKEN || "";
 const bot = new Telegraf(BOT_TOKEN);
 const timer = 1 * 60000; // 1 minute
 const channelId = -1002104374671;
