@@ -1,10 +1,8 @@
-import { formatDateTimestampForRequest, formatRussianDate } from "./helpers";
-import { PuppeteerClass, siteUrl } from "./Puppeteer";
-import { MessageCommand } from "./types";
-import { Telegraf } from "telegraf";
 import http from "http";
-import { AxiosResponse } from "axios";
-import { TimeRequest, getAvailableTimeForDay } from "./Puppeteer/axiosRequest";
+import { Telegraf } from "telegraf";
+import { formatRussianDate } from "./helpers";
+import { PuppeteerClass } from "./Puppeteer/puppeteer";
+import { MessageCommand } from "./types";
 
 http
   .createServer((_req, res) => {
@@ -41,68 +39,37 @@ bot.hears(MessageCommand.Stop, () => {
     clearInterval(intervalId);
   }
 });
-bot.hears(
-  MessageCommand.CheckManually,
-  async (ctx: { chat: { id: number } }) => {
-    const puppy = new PuppeteerClass();
-    const { availableDays, captchaToken, bearerToken } =
-      await puppy.visitAndIntercept();
-    console.log(`${MessageCommand.CheckManually} availableDays`, availableDays);
-    if (availableDays?.length > 0) {
-      availableDays.forEach((day) => {
-        getAvailableTimeForDay(
-          siteUrl,
-          day,
-          captchaToken,
-          bearerToken ?? ""
-        ).then((response: AxiosResponse<TimeRequest[]>) => {
-          console.log(response);
-          response.data?.forEach((timeOfDay) =>
-            broadCast(
-              "Доступна запись на " +
-                formatDateTimestampForRequest(timeOfDay.dateTime),
-              [ctx.chat.id]
-            )
-          );
-        });
-      });
-    } else {
-      broadCast("Пусто", [ctx.chat.id]);
-    }
-  }
-);
-bot.hears(MessageCommand.Ping, () => {
-  broadCast("pong", [channelId]);
-});
 function checkUpdatesAutomatically() {
   const puppy = new PuppeteerClass();
   puppy
     .visitAndIntercept()
     .then(({ error, availableDays, captchaToken, bearerToken }) => {
       console.log("/try function availableDays", availableDays);
-      if (error) {
+      if (error || availableDays.length < 1) {
         bot.telegram.sendMessage(
           userChatIds[0],
           "Failed to get Available Days, due to captcha"
         );
+        return;
       }
-      availableDays.forEach((day) => {
-        broadCast(`Есть записи на ${formatRussianDate(day)}`, [channelId]);
-        // getAvailableTimeForDay(
-        //   siteUrl,
-        //   day,
-        //   captchaToken,
-        //   bearerToken ?? ""
-        // ).then(({ data }: AxiosResponse<TimeRequest[]>) => {
-        //   data.forEach((timeOfDay) =>
-        //     broadCast(
-        //       "Доступна запись на " +
-        //         formatDateTimestampForRequest(timeOfDay.dateTime),
-        //       [channelId]
-        //     )
-        //   );
-        // });
-      });
+      const daysString = availableDays
+        .map((day) => formatRussianDate(day))
+        .join(", ");
+      broadCast(`Есть записи на ${daysString}`, [channelId]);
+      // getAvailableTimeForDay(
+      //   siteUrl,
+      //   day,
+      //   captchaToken,
+      //   bearerToken ?? ""
+      // ).then(({ data }: AxiosResponse<TimeRequest[]>) => {
+      //   data.forEach((timeOfDay) =>
+      //     broadCast(
+      //       "Доступна запись на " +
+      //         formatDateTimestampForRequest(timeOfDay.dateTime),
+      //       [channelId]
+      //     )
+      //   );
+      // });
     })
     .catch((error) => {
       console.error("Error in update:", error);
