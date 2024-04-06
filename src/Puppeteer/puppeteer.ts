@@ -8,7 +8,7 @@ import { VisitAndInterceptType } from "../types";
 
 export const siteUrl = "https://rejestracjapoznan.poznan.uw.gov.pl/";
 const targetUrl = `${siteUrl}api/Slot/GetAvailableDaysForOperation`;
-const targetButton = "#Operacja0 .row:nth-child(5)";
+const targetButton = ".wizard-tab-content .row:nth-child(5)";
 const dalejButton = "button.btn.footer-btn.btn-secondary";
 
 export class PuppeteerClass {
