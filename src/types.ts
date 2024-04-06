@@ -23,3 +23,10 @@ export enum Operation {
   UzeskanieStempla = "Uzeskanie Stempla",
   ObywatelstwoPolskie = "Obywatelstwo Polskie",
 }
+
+export interface VisitAndInterceptType {
+  error: boolean;
+  availableDays: string[];
+  captchaToken: string | null;
+  bearerToken: string | null;
+}

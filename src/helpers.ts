@@ -21,7 +21,7 @@ export function formatDateTimestampForRequest(inputDateString: string): string {
 }
 
 export function randomizeViewPorts(): [width: number, height: number] {
-  const width= Math.floor(Math.random() * (1600 - 700 + 1)) + 700;
+  const width = Math.floor(Math.random() * (1600 - 700 + 1)) + 700;
   const height = Math.floor(Math.random() * (1750 - 1200 + 1)) + 1200;
   return [width, height];
 }

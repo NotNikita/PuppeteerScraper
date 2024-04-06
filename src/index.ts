@@ -11,7 +11,7 @@ http
     res.write("Hello World!");
     res.end();
   })
-  .listen(+(process.env.PORT || 4000));
+  .listen(process.env.PORT || 4000);
 
 // polling allows the bot to listen for and receive new messages
 const bot = new Telegraf(BOT_TOKEN);

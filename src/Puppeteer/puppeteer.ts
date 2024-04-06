@@ -1,16 +1,16 @@
-import puppeteer, { Browser, Page } from "puppeteer";
+import { Browser, Page } from "puppeteer";
 import puppeteerExtra from "puppeteer-extra";
 import Stealth from "puppeteer-extra-plugin-stealth";
 import UserAgent from "user-agents";
 import { getQueryParams, randomizeViewPorts } from "../helpers";
+import { BROWSER_LAUNCHING_SETTINGS } from "../config";
+import { VisitAndInterceptType } from "../types";
 
-type VisitAndInterceptType = {
-  error: boolean;
-  availableDays: string[];
-  captchaToken: string | null;
-  bearerToken: string | null;
-};
 export const siteUrl = "https://rejestracjapoznan.poznan.uw.gov.pl/";
+const targetUrl = `${siteUrl}api/Slot/GetAvailableDaysForOperation`;
+const targetButton = "#Operacja0 .row:nth-child(5)";
+const dalejButton = "button.btn.footer-btn.btn-secondary";
+
 export class PuppeteerClass {
   browser: Browser | undefined;
   page: Page | undefined;
@@ -20,16 +20,10 @@ export class PuppeteerClass {
   availableDays: string[] | undefined = [];
   recaptchaToken: string | null = "";
   bearerToken: string | null = "";
-  defaultAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+  defaultAgent =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36";
 
   constructor() {}
-
-  async createBrowser() {
-    this.browser = await puppeteer.launch({
-      headless: true,
-      // args: ["--no-sandbox", "--single-process", "--no-zygote"],
-    });
-  }
 
   async initiatePage() {
     this.page = await this.browser?.newPage();
@@ -39,9 +33,7 @@ export class PuppeteerClass {
     await this.page
       ?.browserContext()
       .overridePermissions(siteUrl, ["geolocation"]);
-    await this.page?.setUserAgent(
-      this.defaultAgent
-    );
+    await this.page?.setUserAgent(this.defaultAgent);
     await this.page?.setGeolocation({
       latitude: this.latitude,
       longitude: this.longitude,
@@ -51,33 +43,23 @@ export class PuppeteerClass {
   async getAvailableTimeForDate() {}
 
   visitAndIntercept(): Promise<VisitAndInterceptType> {
-    const targetUrl = `${siteUrl}api/Slot/GetAvailableDaysForOperation`;
     const [width, height] = randomizeViewPorts();
-    const newAgent = new UserAgent().random().toString()
+    const newAgent = new UserAgent().random().toString();
     let isFailedToSolveCaptcha;
     try {
       return new Promise<VisitAndInterceptType>((resolve) => {
         puppeteerExtra.use(Stealth());
         puppeteerExtra
-          .launch({
-            headless: false,
-            args: [
-              "--no-sandbox",
-              // "--single-process",
-              // "--no-zygote",
-              // "--disable-features=site-per-process",
-            ],
-          })
+          .launch(BROWSER_LAUNCHING_SETTINGS)
           .then(async (browser) => {
             this.browser = browser;
             this.page = await this.browser?.newPage();
-            this.page.setUserAgent(newAgent ?? this.defaultAgent)
+            this.page.setUserAgent(newAgent ?? this.defaultAgent);
             this.page.setJavaScriptEnabled(true);
-            // await this.overrideLocation();
 
             this.page?.on("response", async (response) => {
-            const request = response.request();
-            const requestUrl = request.url();
+              const request = response.request();
+              const requestUrl = request.url();
 
               if (requestUrl.includes(targetUrl)) {
                 const requestHeaders = request.headers();
@@ -100,12 +82,9 @@ export class PuppeteerClass {
               }
             });
 
-            await this.page?.goto(siteUrl, {timeout: 0});
+            await this.page?.goto(siteUrl, { timeout: 0 });
             // await this.page?.waitForNavigation();
             await this.page?.setViewport({ width, height });
-
-            const targetButton = "#Operacja0 .row:nth-child(5)";
-            const dalejButton = "button.btn.footer-btn.btn-secondary";
 
             await this.page?.waitForSelector(targetButton);
             await this.page?.click(targetButton);
