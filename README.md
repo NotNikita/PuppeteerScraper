@@ -10,7 +10,7 @@
 
 ### Approaches, that can help to hide from Captchas:
 
-Here is a list of things I'm doing to bypass the captchas and similar blockings:
+[Here is a list of things I'm doing to bypass the captchas and similar blockings:](https://stackoverflow.com/a/64189047)
 
 - Rotating Proxies (on site, not via proxy service)
 - Enable stealth mode (via puppeteer-extra-plugin-stealth)
