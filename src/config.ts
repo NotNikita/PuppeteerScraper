@@ -4,6 +4,16 @@ import { PuppeteerLaunchOptions } from "puppeteer";
 dotenv.config();
 
 const IS_PROD = !!process.env.PROD === true;
+// For MY proxy, puppeteer and chromium version socks5 doesnt work
+export const PROXY_REQUEST_TYPE = process.env.IS_SOCKS5 ? "socks5" : "http";
+export const PROXY_USERNAME = process.env.PROXY_USERNAME;
+export const PROXY_PASSWORD = process.env.PROXY_PASSWORD;
+
+console.log(
+  `Environment: ${IS_PROD ? "PROD" : "DEV"}, Proxy creds: ${
+    PROXY_USERNAME && PROXY_PASSWORD ? "Presented" : "Unavailable"
+  }`
+);
 
 /**
  * Argument guide:

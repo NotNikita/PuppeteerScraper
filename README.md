@@ -1,10 +1,27 @@
+# Anonymous Telegram Bot Scrapper With Puppeteer
+
+## Tech Stack:
+
+- Node.js
+- Puppeteer
+- Telegraf (bot and channel)
+- Heroku
+- Proxy rotation
+
 ### Approaches, that can help to hide from Captchas:
 
 Here is a list of things I'm doing to bypass the captchas and similar blockings:
 
+- Rotating Proxies (on site, not via proxy service)
 - Enable stealth mode (via puppeteer-extra-plugin-stealth)
 - Randomize User-agent or Set a valid one (via random-useragent)
 - Randomize Viewport size
+
+Note:
+
+> Skipping such requests for app that is running 160 hours/month saved me
+> 655 kB each run, or 6.2gb/month
+
 - Skip images/styles/fonts loading for better performance
 - Pass "WebDriver check"
 - Pass "Chrome check"
@@ -34,6 +51,7 @@ Example:
 >
 > bot.command('menu', (ctx) => {
 > ctx.reply('Choose an option:', Markup.inlineKeyboard([
+>
 > > Markup.button.callback('Click me', 'button_click'),
 > > ]));
-> });
+> > });
