@@ -58,11 +58,12 @@ export function configureLaunchSettings(
 ): PuppeteerLaunchOptions {
   const { url, port } = getRandomProxyFromFile();
   const proxySetting = `--proxy-server=${PROXY_REQUEST_TYPE}://${url}:${port}`;
+  console.log("Selected proxy", proxySetting);
   const newArguments = initialSettings.args
     ? [...initialSettings.args, proxySetting]
     : [proxySetting];
   return {
     ...initialSettings,
-    // args: newArguments,
+    args: newArguments,
   };
 }

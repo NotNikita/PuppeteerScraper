@@ -107,10 +107,10 @@ export class PuppeteerClass {
     this.page = await this.browser?.newPage();
 
     if (!this.page) return;
-    // await this.page.authenticate({
-    //   username: PROXY_USERNAME ?? username,
-    //   password: PROXY_PASSWORD ?? password,
-    // });
+    await this.page.authenticate({
+      username: PROXY_USERNAME ?? username,
+      password: PROXY_PASSWORD ?? password,
+    });
     // Set additional browser properties
     await this.page.setExtraHTTPHeaders({
       "Accept-Language": "pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7",
@@ -128,9 +128,10 @@ export class PuppeteerClass {
     this.page.setUserAgent(agent);
 
     // Set viewport to a common resolution
+    const [width, height] = randomizeViewPorts();
     await this.page.setViewport({
-      width: 1920,
-      height: 1080,
+      width,
+      height,
       deviceScaleFactor: 1,
       isMobile: false,
       hasTouch: false,
@@ -161,7 +162,6 @@ export class PuppeteerClass {
   }
 
   visitAndIntercept(): Promise<VisitAndInterceptType> {
-    const [width, height] = randomizeViewPorts();
     const { username, password } = getRandomProxyFromFile();
     const LAUNCH_SETTINGS = configureLaunchSettings(BROWSER_LAUNCHING_SETTINGS);
     console.log("LAUNCH_SETTINGS", LAUNCH_SETTINGS);
@@ -217,8 +217,6 @@ export class PuppeteerClass {
     return async (response: HTTPResponse) => {
       const request = response.request();
       const requestUrl = request.url();
-
-      console.log("Intercepted", requestUrl, request);
 
       if (requestUrl.includes(TARGET_URL)) {
         const requestHeaders = request.headers();

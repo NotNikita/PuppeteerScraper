@@ -15,14 +15,15 @@ http
 
 // polling allows the bot to listen for and receive new messages
 const bot = new Telegraf(BOT_TOKEN);
-const timer = 1 * 10000; // 1 minute
+const timer = 1 * 60000; // 1 minute
 const channelId = -1002104374671;
 // second is mine
 const userChatIds = [336972408, 5441646038];
-let intervalId: NodeJS.Timeout | undefined = setInterval(
-  checkUpdatesAutomatically,
-  timer
-);
+// let intervalId: NodeJS.Timeout | undefined = setInterval(
+//   checkUpdatesAutomatically,
+//   timer
+// );
+checkUpdatesAutomatically();
 
 bot.start((ctx: { reply: (arg0: string) => void; chat: { id: number } }) => {
   ctx.reply("Bot started.");
@@ -31,13 +32,13 @@ bot.start((ctx: { reply: (arg0: string) => void; chat: { id: number } }) => {
     userChatIds.push(ctx.chat.id);
   }
 });
-bot.hears(MessageCommand.Restart, () => {
-  intervalId = setInterval(checkUpdatesAutomatically, timer);
-});
+// bot.hears(MessageCommand.Restart, () => {
+//   intervalId = setInterval(checkUpdatesAutomatically, timer);
+// });
 bot.hears(MessageCommand.Stop, () => {
-  if (intervalId) {
-    clearInterval(intervalId);
-  }
+  // if (intervalId) {
+  //   clearInterval(intervalId);
+  // }
 });
 function checkUpdatesAutomatically() {
   const puppy = new PuppeteerClass();
