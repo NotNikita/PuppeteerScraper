@@ -25,7 +25,7 @@ console.log(
  */
 export const BROWSER_LAUNCHING_SETTINGS: PuppeteerLaunchOptions = IS_PROD
   ? {
-      headless: "new",
+      headless: true,
       args: [
         "--no-sandbox",
         "--disable-gpu",

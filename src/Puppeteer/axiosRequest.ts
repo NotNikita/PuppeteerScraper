@@ -33,7 +33,7 @@ export const getAvailableTimeForDay = (
   axios.post<TimeRequest[]>(
     `${url}api/Slot/GetAvailableSlotsForOperationAndDay`,
     {
-      operationId: 8,
+      operationId: 12,
       day: formatDateTimestampForRequest(date),
       recaptchaToken: captchaToken,
     },

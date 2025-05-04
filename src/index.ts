@@ -15,7 +15,7 @@ http
 
 // polling allows the bot to listen for and receive new messages
 const bot = new Telegraf(BOT_TOKEN);
-const timer = 1 * 60000; // 1 minute
+const timer = 1 * 10000; // 1 minute
 const channelId = -1002104374671;
 // second is mine
 const userChatIds = [336972408, 5441646038];
@@ -55,7 +55,9 @@ function checkUpdatesAutomatically() {
       const daysString = availableDays
         .map((day) => formatRussianDate(day))
         .join(", ");
-      broadCast(`Есть записи на ${daysString}`, [channelId]);
+      // broadCast(`Есть записи на ${daysString}`, [channelId]);
+      console.log(`Есть записи на ${daysString}`);
+
       // getAvailableTimeForDay(
       //   siteUrl,
       //   day,

@@ -63,6 +63,6 @@ export function configureLaunchSettings(
     : [proxySetting];
   return {
     ...initialSettings,
-    args: newArguments,
+    // args: newArguments,
   };
 }
